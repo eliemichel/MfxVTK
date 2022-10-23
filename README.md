@@ -1,11 +1,11 @@
 # MfxVTK
 
-*An [Open Mesh Effect][OpenMeshEffect] plugin for [VTK][VTK] filters*
+*An [OpenMfx][OpenMfx] plugin for [VTK][VTK] filters*
 
 ![Smoothing Suzanne the monkey with VTK filters](docs/source/_static/monkeys.png)
 
 MfxVTK is a plugin that brings filters from the [Visualization Toolkit][VTK] (VTK) library
-into any 3D software that supports the [Open Mesh Effect][OpenMeshEffect] standard.
+into any 3D software that supports the [OpenMfx][OpenMeshEffect] standard.
 It provides a non-destructive workflow for polygonal meshes, wireframes and point clouds.
 
 To learn more, please have a look at [MfxVTK documentation][MfxVTKdocs].
@@ -22,10 +22,10 @@ should come in the future.*
 
 ### How to use it
 
-In the [OpenMeshEffectForBlender branch of Blender][OpenMeshEffectForBlender]:
+In the [OpenMfxForBlender branch of Blender][OpenMfxForBlender]:
 
 - select your mesh
-- open the **Modifier** tab and select **Open Mesh Effect** modifier
+- open the **Modifier** tab and select **OpenMfx** modifier
 - in modifier properties, set path to MfxVTK plugin (`mfx_vtk_plugin.ofx` – download
   [MfxVTK release] from GitHub or build it yourself)
 - select desired effect from the drop-down menu
@@ -45,7 +45,7 @@ First, build VTK (version >= 9.0), see [instructions on VTK wiki][BuildingVTK].
 Then clone MfxVTK from GitHub (note that it has the OpenMeshEffect repository as a submodule):
 
 ```sh
-git clone --recurse-submodules https://github.com/tkarabela/MfxVTK
+git clone https://github.com/tkarabela/MfxVTK
 ``` 
 
 Build MfxVTK using CMake:
@@ -62,8 +62,8 @@ The plugin is now in your build directory: `src/mfx_vtk_plugin/libmfx_vtk_plugin
 
 ### How it works
 
-It converts Open Mesh Effect mesh into `vtkPolyData`. General structure
-of the plugin as well as handy C++ wrapper over the Open Mesh Effect interface
+It converts OpenMfx mesh into `vtkPolyData`. General structure
+of the plugin as well as handy C++ wrapper over the OpenMfx interface
 is borrowed from [MfxVCG].
 
 ### License
@@ -72,7 +72,7 @@ MfxVTK source code (`src/mfx_vtk_plugin`) is released under the MIT license, see
 Parts of this repository also contain code licensed under the Apache 2 license, please
 see copyright notices in individual files.
 
-    MfxVTK Open Mesh Effect plug-in
+    MfxVTK OpenMfx plug-in
     Copyright (c) 2020 Tomas Karabela
     
     Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -93,8 +93,8 @@ see copyright notices in individual files.
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
 
-[OpenMeshEffect]: http://openmesheffect.org
-[OpenMeshEffectForBlender]: https://github.com/eliemichel/OpenMeshEffectForBlender
+[OpenMfx]: http://openmesheffect.org
+[OpenMfxForBlender]: https://github.com/eliemichel/OpenMfxForBlender
 [VTK]: https://vtk.org
 [MfxVTKdocs]: https://mfxvtk.readthedocs.io
 [MfxVTKeffects]: https://mfxvtk.readthedocs.io/en/latest/list-of-effects.html

@@ -21,4 +21,5 @@
 
 cmake_minimum_required(VERSION 3.0)
 project(MfxVTK)
+include(cmake/FetchOpenMfx.cmake)
 add_subdirectory(src)

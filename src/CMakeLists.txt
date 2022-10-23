@@ -21,5 +21,73 @@
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-add_subdirectory(OpenMeshEffect)
-add_subdirectory(mfx_vtk_plugin)
+set(INC
+  .
+)
+
+file(GLOB SRC_EFFECTS effects/*.cpp effects/*.h)
+
+set(SRC
+        VtkEffect.cpp
+        VtkEffect.h
+        VtkEffectUtils.cpp
+        VtkEffectUtils.h
+        VtkEffectInput.cpp
+        VtkEffectInput.h
+        VtkEffectInputDef.cpp
+        VtkEffectInputDef.h
+        mfx_vtk_utils.h
+        ${SRC_EFFECTS})
+
+# OpenMfx dependency
+set(LIB
+  OpenMfx::Sdk::Cpp::Plugin
+)
+
+# Enable C++20 (required to use designated initializers)
+set(CMAKE_CXX_STANDARD 20)
+if(MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++latest")
+endif(MSVC)
+
+# VTK dependency, part 1
+find_package(VTK COMPONENTS
+        vtkCommonCore
+        vtkCommonDataModel
+        vtkFiltersCore
+        vtkFiltersSources
+        vtkFiltersModeling
+        vtkFiltersGeometry
+        vtkFiltersExtraction
+        vtkFiltersFlowPaths
+        vtkIOXML
+        QUIET)
+if (NOT VTK_FOUND)
+    message("VTK not found: ${VTK_NOT_FOUND_MESSAGE}")
+endif()
+message (STATUS "VTK_VERSION: ${VTK_VERSION}")
+
+# Main target (for effects in ./effects)
+add_library(mfx_vtk_plugin SHARED mfx_vtk_plugin.cpp ${SRC})
+target_include_directories(mfx_vtk_plugin PRIVATE ${INC})
+target_link_libraries(mfx_vtk_plugin PRIVATE ${LIB} ${VTK_LIBRARIES})
+set_target_properties(mfx_vtk_plugin PROPERTIES SUFFIX ".ofx")
+
+# Extra target (for effects in mfx_vtk_plugin_extra.cpp)
+add_library(mfx_vtk_plugin_extra SHARED mfx_vtk_plugin_extra.cpp ${SRC})
+target_include_directories(mfx_vtk_plugin_extra PRIVATE ${INC})
+target_link_libraries(mfx_vtk_plugin_extra PRIVATE ${LIB} ${VTK_LIBRARIES})
+set_target_properties(mfx_vtk_plugin_extra PROPERTIES SUFFIX ".ofx")
+
+# VTK dependency, part 2
+vtk_module_autoinit(
+        TARGETS mfx_vtk_plugin mfx_vtk_plugin_extra
+        MODULES ${VTK_LIBRARIES}
+)
+
+# OpenMP dependency
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(mfx_vtk_plugin PUBLIC OpenMP::OpenMP_CXX)
+    target_link_libraries(mfx_vtk_plugin_extra PUBLIC OpenMP::OpenMP_CXX)
+endif()
